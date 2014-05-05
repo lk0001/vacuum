@@ -40,6 +40,12 @@ module Vacuum
 
     attr_accessor :associate_tag
 
+    @options = {}
+
+    class << self
+      attr_accessor :options
+    end
+
     # Create a new request for given locale.
     #
     # locale - The String Product Advertising API locale (default: US).
@@ -50,6 +56,7 @@ module Vacuum
     def initialize(locale = 'US', secure = false)
       host = HOSTS.fetch(locale) { raise BadLocale }
       @aws_endpoint = "#{secure ? 'https' : 'http' }://#{host}/onca/xml"
+      load_config
     end
 
     # Configure the Amazon Product Advertising API request.
@@ -64,6 +71,21 @@ module Vacuum
     def configure(credentials)
       credentials.each { |key, val| self.send("#{key}=", val) }
       self
+    end
+
+    # Configure the Amazon Product Advertising API request for all requests.
+    #
+    # credentials - The Hash credentials of the API endpoint.
+    #               :aws_access_key_id     - The String Amazon Web Services
+    #                                        (AWS) key.
+    #               :aws_secret_access_key - The String AWS secret.
+    #               :associate_tag         - The String Associate Tag.
+    def self.configure(credentials)
+      @options.merge!(credentials)
+    end
+
+    def load_config
+      configure(self.class.options)
     end
 
     # Execute an API operation. See `OPERATIONS` constant for available

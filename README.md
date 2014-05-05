@@ -46,6 +46,16 @@ You will still need to set a distinct associate tag for each locale:
 req.associate_tag = 'tag'
 ```
 
+You can also configure the class so you won't have to set the credentials for each request:
+
+```ruby
+Vacuum::Request.configure(
+    aws_access_key_id:     'key',
+    aws_secret_access_key: 'secret',
+    associate_tag:         'tag'
+)
+```
+
 ### Request
 
 Set up your parameters and make a request:

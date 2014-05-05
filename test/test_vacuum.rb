@@ -35,4 +35,12 @@ class TestVacuum < Minitest::Test
     res = req.item_lookup(query: {}, mock: true)
     refute_empty res.to_h
   end
+
+  def test_class_configuration
+    Request.configure(aws_access_key_id: 'key', aws_secret_access_key: 'secret', associate_tag: 'tag')
+    req = Request.new
+    assert_equal 'key', req.aws_access_key_id
+    assert_equal 'secret', req.aws_secret_access_key
+    assert_equal 'tag', req.associate_tag
+  end
 end
